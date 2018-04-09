@@ -40,7 +40,7 @@ class TransactionsContainer extends Component {
   }
 }
 
-const TransactionsHeader = props => {
+export const TransactionsHeader = props => {
   const tableHeaders = props.headers.map((header, idx) => (
     <th key={idx} scope="col">
       {header}
@@ -54,7 +54,7 @@ const TransactionsHeader = props => {
   );
 };
 
-const Transaction = props => {
+export const Transaction = props => {
   const { transaction } = props;
   return (
     <tr>
@@ -66,7 +66,7 @@ const Transaction = props => {
   );
 };
 
-const TransactionsBody = props => {
+export const TransactionsBody = props => {
   const transactions = props.transactions.map((transaction, idx) => (
     <Transaction key={idx} transaction={transaction} />
   ));
@@ -82,7 +82,7 @@ const TransactionsTotal = props => {
   return convertToCurrency(`${total}`);
 };
 
-const TransactionsTable = props => {
+export const TransactionsTable = props => {
   const headers = ["Date", "Company", "Account"];
   // Add the transactions total to the header
   headers.push(<TransactionsTotal transactions={props.transactions} />);
