@@ -5,6 +5,7 @@ import classnames from "classnames";
 import { fetchTransactions } from "./RequestUtils";
 
 import ErrorComponent from "./ErrorComponent";
+import LoadWrapper from "./LoadWrapper";
 
 const URL = "http://resttest.bench.co/transactions";
 
@@ -24,22 +25,25 @@ class TransactionsContainer extends Component {
   };
 
   componentDidMount() {
+    this.setState({ loading: true });
     fetchTransactions(URL)
       .then(transactions => {
         const sortedTransactions = _.orderBy(transactions, ["Date"], ["desc"]);
-        this.setState({ transactions: sortedTransactions });
+        this.setState({ transactions: sortedTransactions, loading: false });
       })
       .catch(error => {
-        this.setState({ error: error.error });
+        this.setState({ error: error.error, loading: false });
       });
   }
 
   render() {
     return (
-      <TransactionsTable
-        transactions={this.state.transactions}
-        error={this.state.error}
-      />
+      <LoadWrapper loading={this.state.loading}>
+        <TransactionsTable
+          transactions={this.state.transactions}
+          error={this.state.error}
+        />
+      </LoadWrapper>
     );
   }
 }
