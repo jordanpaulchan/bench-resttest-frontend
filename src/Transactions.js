@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import _ from "lodash";
+import classnames from "classnames";
 
 import { fetchTransactions } from "./RequestUtils";
 
@@ -12,8 +13,8 @@ function convertToCurrency(amount) {
     return amount;
   }
 
-  if (amount[0] === "-") {
-    return `-$${amount.slice(1)}`;
+  if (amount < 0) {
+    return `-$${Math.abs(amount)}`;
   } else {
     return `$${amount}`;
   }
@@ -55,7 +56,7 @@ export const TransactionsHeader = props => {
   ));
 
   return (
-    <thead className="thead-dark">
+    <thead className="thead-light">
       <tr>{tableHeaders}</tr>
     </thead>
   );
@@ -63,12 +64,13 @@ export const TransactionsHeader = props => {
 
 export const Transaction = props => {
   const { transaction } = props;
+  const amount = parseFloat(transaction.Amount) || 0;
   return (
-    <tr>
+    <tr className={classnames({ "table-success": amount > 0 })}>
       <th scope="row">{transaction.Date || ""}</th>
       <td>{transaction.Company || ""}</td>
       <td>{transaction.Ledger || ""}</td>
-      <td>{convertToCurrency(transaction.Amount || "")}</td>
+      <td>{convertToCurrency(amount)}</td>
     </tr>
   );
 };
@@ -94,7 +96,7 @@ export const TransactionsTable = props => {
   // Add the transactions total to the header
   headers.push(<TransactionsTotal transactions={props.transactions} />);
   return (
-    <div>
+    <div className="container">
       <ErrorComponent error={props.error} />
       <table className="table">
         <TransactionsHeader headers={headers} />
