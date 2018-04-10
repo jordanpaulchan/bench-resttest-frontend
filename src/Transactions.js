@@ -3,6 +3,8 @@ import _ from "lodash";
 
 import { fetchTransactions } from "./RequestUtils";
 
+import ErrorComponent from "./ErrorComponent";
+
 const URL = "http://resttest.bench.co/transactions";
 
 function convertToCurrency(amount) {
@@ -31,12 +33,17 @@ class TransactionsContainer extends Component {
         this.setState({ transactions: sortedTransactions });
       })
       .catch(error => {
-        this.setState({ error });
+        this.setState({ error: error.error });
       });
   }
 
   render() {
-    return <TransactionsTable transactions={this.state.transactions} />;
+    return (
+      <TransactionsTable
+        transactions={this.state.transactions}
+        error={this.state.error}
+      />
+    );
   }
 }
 
@@ -87,17 +94,16 @@ export const TransactionsTable = props => {
   // Add the transactions total to the header
   headers.push(<TransactionsTotal transactions={props.transactions} />);
   return (
-    <table className="table">
-      <TransactionsHeader headers={headers} />
-      <TransactionsBody transactions={props.transactions} />
-    </table>
+    <div>
+      <ErrorComponent error={props.error} />
+      <table className="table">
+        <TransactionsHeader headers={headers} />
+        <TransactionsBody transactions={props.transactions} />
+      </table>
+    </div>
   );
 };
 
-const Transactions = () => (
-  <TransactionsContainer>
-    <TransactionsTable />
-  </TransactionsContainer>
-);
+const Transactions = () => <TransactionsContainer />;
 
 export default Transactions;
