@@ -30,7 +30,7 @@ class TransactionsContainer extends Component {
   componentDidMount() {
     fetchTransactions(URL)
       .then(transactions => {
-        const sortedTransactions = _.sortBy(transactions, ["Date"]);
+        const sortedTransactions = _.orderBy(transactions, ["Date"], ["desc"]);
         this.setState({ transactions: sortedTransactions });
       })
       .catch(error => {
