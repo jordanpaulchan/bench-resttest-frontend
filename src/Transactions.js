@@ -9,14 +9,10 @@ import ErrorComponent from "./ErrorComponent";
 const URL = "http://resttest.bench.co/transactions";
 
 function convertToCurrency(amount) {
-  if (!amount) {
-    return amount;
-  }
-
   if (amount < 0) {
-    return `-$${Math.abs(amount)}`;
+    return `-$${Math.abs(amount).toFixed(2)}`;
   } else {
-    return `$${amount}`;
+    return `$${amount.toFixed(2)}`;
   }
 }
 
@@ -88,7 +84,7 @@ const TransactionsTotal = props => {
     (acc, transaction) => acc + parseFloat(transaction["Amount"]) || 0,
     0
   );
-  return convertToCurrency(`${total}`);
+  return convertToCurrency(total);
 };
 
 export const TransactionsTable = props => {
