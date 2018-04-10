@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import _ from "lodash";
 import classnames from "classnames";
+import moment from "moment";
 
 import { fetchTransactions } from "./RequestUtils";
 
@@ -67,7 +68,9 @@ export const Transaction = props => {
   const amount = parseFloat(transaction.Amount) || 0;
   return (
     <tr className={classnames({ "table-success": amount > 0 })}>
-      <th scope="row">{transaction.Date || ""}</th>
+      <th scope="row">
+        {transaction.Date ? moment(transaction.Date).format("MMM Do YYYY") : ""}
+      </th>
       <td>{transaction.Company || ""}</td>
       <td>{transaction.Ledger || ""}</td>
       <td>{convertToCurrency(amount)}</td>
